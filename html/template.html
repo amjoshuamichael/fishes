@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fishes</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        #intro-notes.completed {
+            width: calc(100vw - 300px);
+        }
+
+        #top-links {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+
+        #scroll-catcher {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            overflow-y: hidden;
+            overflow-x: hidden;
+            z-index: 10000;
+        }
+
+        #scrollable {
+            height: 800000px;
+        }
+
+        #parallax {
+            perspective: 1px;
+            width: 100vw;
+            height: 100vh;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            perspective-origin-x: 100%;
+        }
+
+        #parallax:not(.second) { 
+            scrollbar-width: none;  /* Firefox */ 
+        }
+        #parallax:not(.second)::-webkit-scrollbar { 
+            display: none; /* Chrome / Safari */
+        }
+
+        .p {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin-x: 100%;
+        }
+
+        .vertical {
+            writing-mode: vertical-lr;
+            text-orientation: upright;
+        }
+        
+        #background {
+            background: linear-gradient(
+                #ffffff, #ffffff 145000px, #d1d1d1 151000px, #000 163000px, #000 185000px, #fff3d4 211200px, #fff3d4 213800px, #ecfcff 227500px, #ecfcff 272000px, #212528 279700px, #212528 289800px, #e7ffe8 296800px, #e7ffe8 343456px, #fff8e7 353000px, #bf8333 362500px, #201404 370000px, #000000 372000px, #000000 404200px, #ffffff 414000px, #ffffff 455810px, #fff3d4 455811px, #fff3d4 456810px, #ecfcff 456811px, #ecfcff 457810px, #e7ffe8 457811px, #e7ffe8 458810px, #fff8e7 458811px, #fff8e7 459810px, #fff3d4 459811px, #fff3d4 460810px, #ecfcff 460811px, #ecfcff 461810px, #e7ffe8 461811px, #e7ffe8 462810px, #fff8e7 462811px, #fff8e7 463810px
+            );
+        }
+
+        #background {
+            width: 100vw;
+            height: calc(462301px + 100vh); /* Tall body for scrolling */
+        }
+
+        #eaten {
+            position: relative;
+            z-index: 99;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #eaten > img {
+            width: 480px;
+            height: 270px;
+            image-rendering: pixelated;
+        }
+
+        #eaten > #words {
+            color: white;
+            font-size: 40px;
+        }
+
+        #bottom-links, #top-links {
+            display: flex;
+            flex-direction: row;
+            width: 420px;
+            gap: 30px;
+            justify-content: flex-end;
+        }
+
+        #bottom-links img, #top-links img {
+            width: 50px;
+        }
+
+        #songused > a { color: white } 
+
+        @keyframes appear { to { opacity: 1; } }
+        
+        .p {
+            position: absolute;
+            margin: 0px;
+        }
+
+                  #eaten > #words > p:not(:first-child) { opacity: 0; }
+        .second > #eaten > #words > p:not(:first-child) { animation: appear 0.01s forwards; }
+        .second > #eaten > #words > p:nth-child(2) { animation-delay: 5.3s; }
+        .second > #eaten > #words > p:nth-child(3) { animation-delay: 12.3s; }
+        .second > #eaten > #words > p:nth-child(4) { animation-delay: 18.0s; }
+
+        @keyframes fadein { 
+            from { 
+                opacity: 0;
+                transform: translate(0px, 20px);
+            } 
+            to {
+                opacity: 1;
+                transform: translate(0px, 0px);
+            }
+        }
+
+        .second #bottom-links a:nth-child(1) img { 
+            opacity: 0;
+            animation: fadein 0.5s ease-out 25s forwards;
+        }
+        .second #bottom-links a:nth-child(2) img { 
+            opacity: 0;
+            animation: fadein 0.5s ease-out 25.1s forwards;
+        }
+        .second #bottom-links a:nth-child(3) img {
+            opacity: 0;
+            animation: fadein 0.5s ease-out 25.2s forwards; 
+        }
+
+        .second #songused {
+            opacity: 0;
+            animation: fadein 0.5s ease-out 26s forwards;
+            font-size: 20px;
+            margin-top: 40px;
+        }
+
+        .second #youcan {
+            opacity: 0;
+            animation: fadein 0.5s ease-out 27s forwards;
+            font-size: 20px;
+            margin: 5px;
+            color: white;
+            margin-top: 20px;
+        }
+
+        @keyframes hide { to { 
+            display: none; 
+        } }
+        @keyframes black { to { 
+            display: block;
+            filter: brightness(0);
+        } }
+        @keyframes unhide { to { 
+            display: block;
+            filter: none;
+        } }
+        
+        .second > div.p, .second > div#background {
+            animation: hide 0s linear forwards, black 0s linear 26s forwards, unhide 0s linear 27s forwards;
+        }
+
+        #non-chrome { display: none }
+        @supports (-webkit-hyphens:none) {
+            #non-chrome { display: block }
+        }
+        @supports not (selector(::-webkit-scrollbar)) {
+            #non-chrome { display: block }
+        }
+
+        #non-desktop { display: none }
+        @media only screen and (max-width: 768px) {
+            #non-desktop { display: block }
+        }
+    </style>
+</head>
+<body>
+    <div id="scroll-catcher">
+        <div id="scrollable">
+          <div id="intro-notes">
+            <p style="z-index: 1000">This website is best experienced with something that lets you <strong>scroll quickly</strong>, like a <strong>trackpad</strong>. You'll also need to <strong>make sure your audio is on.</strong> Click <button onclick="document.getElementById('audiotest').play()">here</button> to test your audio.</p>
+            <audio id="audiotest" src="https://aaaa.sh/fishes/audiotest.mp3" style="display: none"></audio>
+            <p id="non-chrome">This website is intended for Chrome, or Chromium-based browsers.<p>
+            <p id="non-desktop">This website is not designed for mobile.</p>
+            <p id="low-battery" style="display:none;">If your browser has a "low-power mode", <strong>please turn it off, or plug in your computer.</strong></p>
+          </div>
+
+          <div id="top-links" style="display: none">
+              <a target="_blank" href="https://github.com/amjoshuamichael/fishes"><img loading="lazy" src="https://raw.githubusercontent.com/primer/octicons/refs/heads/main/icons/mark-github-24.svg" /></a>
+              <a target="_blank" href="https://codeberg.org/aaaash/fishes"><img loading="lazy" src="https://codeberg.org/Codeberg/Design/raw/branch/main/logo/special/codeberg-logo_special_fake-transaprency.svg" /></a>
+              <a target="_blank" href="https://aaaa.sh"><img loading="lazy" src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Black%20heart/3D/black_heart_3d.png" /></a>
+              <a target="_blank" href="https://radiohead.com/library/#ir/in-rainbows"><img loading="lazy" src="https://upload.wikimedia.org/wikipedia/en/1/14/Inrainbowscover.png" /></a>
+          </div>
+        </div>
+    </div>
+    <div id="parallax">
+        <div id="background">
+        </div>
+        [[REPLACE_WITH_WORDS_HTML]]
+        <div id="eaten">
+          <audio id="second-half" src="https://aaaa.sh/fishes/secondhalf.mp3" style="display: none;"></audio>
+          <img src="https://aaaa.sh/fishes/underwater.gif" />
+          <div id="words">
+            <p style="text-align: left">i get eaten by the worms</p>
+            <p style="text-align: right">and WEIRD FISHES.</p>
+            <p style="text-align: left">picked over by the worms</p>
+            <p style="text-align: right">and WEIRD FISHES.</p>
+          </div>
+          <div id="bottom-links">
+              <a href="https://github.com/amjoshuamichael/fishes"><img loading="lazy" src="https://raw.githubusercontent.com/primer/octicons/refs/heads/main/icons/mark-github-24.svg" style="filter: invert(1) brightness(0.9)"></a>
+              <a href="https://codeberg.org/aaaash/fishes"><img loading="lazy" src="https://codeberg.org/Codeberg/Design/raw/branch/main/logo/special/codeberg-logo_special_fake-transaprency.svg" style="filter: invert(1) brightness(0.9)"></a>
+              <a href="https://aaaa.sh"><img loading="lazy" src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Black%20heart/3D/black_heart_3d.png" style="filter: invert(1) brightness(1.0)"></a>
+          </div>
+          <div id="songused">
+              <a href="https://radiohead.com/library/#ir/in-rainbows"><span>Song Used: Weird Fishes / Arpeggi - Radiohead</span></a>
+          </div>
+          <div id="youcan">
+              <span>(you can scroll up now, if you'd like)</span>
+          </div>
+        </div>
+    </div>
+</body>
+<script>
+    if (navigator.getBattery) navigator.getBattery().then(battery => {
+        if (battery.level <= 0.25 && !battery.charging)
+            document.getElementById("low-battery").style = ""
+    })
+
+    if (document.cookie.includes("completed")) {
+        document.getElementById("top-links").style = ""
+        document.getElementById("intro-notes").className = "completed"
+    }
+    
+    let textContainer = document.getElementById("parallax")
+    
+    let scrollCatcher = document.getElementById("scroll-catcher")
+    let textContainerHeight = Math.max(scrollCatcher.scrollHeight, scrollCatcher.offsetHeight);
+    
+    let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    let audioBuffer;
+    let audioBufferReverse;
+    
+    let fullSongDuration = 290.08539583333334;
+    let pixelsPerMillisecond = textContainerHeight / (fullSongDuration * 1000);
+    
+    fetch('https://aaaa.sh/fishes/firsthalf.mp3')
+        .then(response => response.arrayBuffer())
+        .then(data => audioContext.decodeAudioData(data))
+        .then(buffer => {
+            var body = document.body,
+                html = document.documentElement;
+    
+            audioBuffer = buffer;
+    
+            audioBufferReverse = audioContext.createBuffer(
+                audioBuffer.numberOfChannels,
+                audioBuffer.length,
+                audioBuffer.sampleRate
+            );
+    
+            for (let channels = 0; channels < audioBuffer.numberOfChannels; channels++) {
+                const dest = audioBufferReverse.getChannelData(channels);
+                const src = buffer.getChannelData(channels);
+    
+                for (let sampleFrames = 0; sampleFrames < buffer.length; sampleFrames++) {
+                    dest[sampleFrames] = src[audioBuffer.length - sampleFrames];
+                }
+            }
+        });
+    
+    function initAudioScrolling() {
+        scrollCatcher.style = "overflow-y: scroll"
+        scrollCatcher.scrollTo(0,0); 
+    
+        let sourceNode;
+        let isPlaying = false;
+    
+        const CROSSFADE_TIME = 0.05
+    
+        function playAudio(position, rate) {
+            let oldSource = sourceNode
+    
+            if (rate < 0) position = audioBuffer.length / audioBuffer.sampleRate - position
+    
+            let newSource = audioContext.createBufferSource();
+            newSource.buffer = rate > 0 ? audioBuffer : audioBufferReverse;
+            newSource.playbackRate.value = Math.pow(Math.abs(rate), 0.8);
+    
+            let gainNode = audioContext.createGain();
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + CROSSFADE_TIME);
+    
+            newSource.connect(gainNode).connect(audioContext.destination);
+            newSource.gainNode = gainNode
+    
+            newSource.start(audioContext.currentTime, position);
+    
+            if (oldSource) {
+                oldSource.gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + CROSSFADE_TIME);
+                oldSource.stop(audioContext.currentTime + CROSSFADE_TIME)
+            }
+    
+            sourceNode = newSource
+        }
+    
+        const MIN_RATE = 0.03
+        const MIN_RATE_DIFF = 0.01
+    
+        let prevRate = 0
+    
+        let prevTime = 0
+    
+        let prevY = scrollCatcher.scrollTop
+    
+        let goingTo = scrollCatcher.scrollTop
+    
+        function detectScrollStop() {
+            let currY = scrollCatcher.scrollTop
+            setTimeout(() => {
+              if (scrollCatcher.scrollTop == currY) {
+                  if (sourceNode) {
+                    sourceNode.gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + CROSSFADE_TIME);
+                    sourceNode.stop(audioContext.currentTime + CROSSFADE_TIME)
+                  }
+    
+                  isPlaying = false
+              }
+            }, 100)
+        }
+    
+        let speedMultiplier = navigator.userAgent.includes("Firefox") ? 2.2 : 1
+    
+        scrollCatcher.addEventListener('scroll', event => {
+            detectScrollStop()
+    
+            if (scrollCatcher.scrollTop == goingTo) return
+    
+            if (!audioBuffer) return
+              
+            let deltaTime = performance.now() - prevTime
+            if (deltaTime == 0) return
+    
+            prevTime = performance.now()
+            let MAXY = pixelsPerMillisecond * deltaTime * speedMultiplier
+    
+            let deltaY = scrollCatcher.scrollTop - prevY
+            if (deltaY == 0) return
+    
+            if (deltaY > MAXY) deltaY = MAXY
+            if (deltaY < -MAXY) deltaY = -MAXY
+    
+            goingTo = prevY + deltaY
+    
+            const EATEN_THRESHOLD = 462301;
+            if (textContainer.scrollTop < EATEN_THRESHOLD && goingTo > EATEN_THRESHOLD) {
+                textContainer.scrollTo(0, textContainer.scrollHeight)
+                scrollCatcher.remove();
+                document.getElementById("second-half").play();
+                document.getElementById("parallax").className += "second";
+    
+                setTimeout(() => {
+                    let scrollDowninterval = setInterval(function scrollDownAttempt() { 
+                        if (textContainer.scrollHeight > 100000) {
+                            // Everything is back, time to scroll down
+                            textContainer.scrollTo(0, textContainer.scrollHeight) 
+                            clearInterval(scrollDowninterval)
+                        }
+                    }, 50)
+                }, 25900)
+
+                document.cookie = "completed"
+                return;
+            }
+    
+            textContainer.scrollTo(0, goingTo)
+            scrollCatcher.scrollTo(0, goingTo)
+    
+            prevY = scrollCatcher.scrollTop
+    
+            let rate = deltaY / MAXY
+            if (Math.abs(prevRate - rate) < MIN_RATE_DIFF) return
+            prevRate = rate
+            let time = scrollCatcher.scrollTop / textContainerHeight * fullSongDuration;
+    
+            if (Math.abs(rate) > MIN_RATE) {
+                playAudio(time, rate)
+                isPlaying = true
+            } else if (isPlaying) {
+                sourceNode.stop()
+                isPlaying = false;
+            }
+        });
+    
+        document.removeEventListener("click", initAudioScrolling)
+    }
+    
+    document.addEventListener("click", initAudioScrolling)
+</script>
+</html>

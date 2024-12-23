@@ -1,0 +1,16 @@
+*
+!src/
+!src/**/*
+!earth.png
+
+!Cargo.lock
+!Cargo.toml
+
+!Times New Roman.ttf
+
+!html/
+!html/template.html
+!html/words.html
+!html/build.js
+
+!.gitignore
