@@ -14,3 +14,5 @@
 !html/build.js
 
 !.gitignore
+
+!README.md
