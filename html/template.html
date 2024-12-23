@@ -345,7 +345,8 @@
             }, 100)
         }
     
-        let speedMultiplier = navigator.userAgent.includes("Firefox") ? 2.2 : 1
+        if (window.speedMultiplier == undefined)
+            window.speedMultiplier = navigator.userAgent.includes("Firefox") ? 2.2 : 1
     
         scrollCatcher.addEventListener('scroll', event => {
             detectScrollStop()
